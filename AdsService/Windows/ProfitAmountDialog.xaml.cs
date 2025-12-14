@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace AdsService.Windows
 {
@@ -19,8 +20,9 @@ namespace AdsService.Windows
 
             if (!ok || value < 0)
             {
+                Random random = new Random();
                 MessageBox.Show(
-                    "Введите целое неотрицательное число.\nПример: 15000",
+                    $"Введите целое неотрицательное число.\nПример: {random.Next(1000, 100_000)}",
                     "Ошибка ввода",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error);
