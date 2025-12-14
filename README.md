@@ -55,8 +55,8 @@
 
 ---
 
-## Структура проекта (рекомендуемо)
-
+## Структура проекта
+```
 AdsService/
 ├─ Pages/
 │ ├─ PublicAdsPage.xaml
@@ -78,7 +78,7 @@ AdsService/
 │ └─ app.ico
 ├─ Model.edmx
 └─ README.md
-
+```
 
 ---
 
