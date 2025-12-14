@@ -1,0 +1,200 @@
+﻿<Page x:Class="AdsService.Pages.PublicAdsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:local="clr-namespace:AdsService.Pages"
+      xmlns:conv="clr-namespace:AdsService.Converters"
+      mc:Ignorable="d"
+      Title="Сервис частных объявлений"
+      FontFamily="Tw Cen MT"
+      FontSize="12"
+      Background="White">
+
+    <Page.Resources>
+        <!-- Цвета по руководству -->
+        <SolidColorBrush x:Key="PrimaryTextBrush" Color="#37474F" />
+        <SolidColorBrush x:Key="SecondaryTextBrush" Color="#78909C" />
+        <SolidColorBrush x:Key="AccentBrush" Color="#FF9C1A" />
+        <SolidColorBrush x:Key="CardBackgroundBrush" Color="#FFFFFFFF" />
+        <SolidColorBrush x:Key="CardBorderBrush" Color="#FFE0E0E0" />
+
+        <!-- Конвертер для изображения (ImagePath -> картинка или заглушка) -->
+        <conv:ImagePathToSourceConverter x:Key="ImagePathToSourceConverter" />
+    </Page.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Шапка с логотипом и заголовком -->
+        <Border Grid.Row="0"
+                Padding="10"
+                Margin="0,0,0,16"
+                Background="White">
+            <DockPanel LastChildFill="False">
+                <Image Source="/Resources/Лого.png"
+                       Width="40"
+                       Height="40"
+                       Margin="0,0,16,0"
+                       Stretch="Uniform" />
+                <TextBlock Text="Сервис частных объявлений"
+                           VerticalAlignment="Center"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="{StaticResource PrimaryTextBrush}" />
+                <Button Content="Войти"
+            Width="90"
+            Height="30"
+            Margin="16,0,0,0"
+            Click="BtnLogin_Click"/>
+
+                <Button Content="Мои объявления"
+            Width="120"
+            Height="30"
+            Margin="16,0,0,0"
+            Click="BtnMyAds_Click"/>
+            </DockPanel>
+        </Border>
+
+        <!-- Панель поиска и фильтров -->
+        <Border Grid.Row="1"
+                Padding="10"
+                Margin="0,0,0,16"
+                Background="White">
+            <StackPanel Orientation="Vertical"
+                        Margin="0,0,0,0">
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,8">
+                    <TextBox x:Name="TxtSearch"
+                             Width="250"
+                             Height="50"
+                             Margin="0,0,16,0"
+                             Padding="10"
+                             VerticalContentAlignment="Center"
+                             Foreground="{StaticResource PrimaryTextBrush}"
+                             TextChanged="TxtSearch_TextChanged"
+                             ToolTip="Поиск по названию и описанию" />
+                    <Button x:Name="BtnResetFilters"
+                            Content="Сбросить фильтры"
+                            Width="130"
+                            Height="50"
+                            Padding="10"
+                            Foreground="White"
+                            Background="{StaticResource AccentBrush}"
+                            BorderBrush="{StaticResource AccentBrush}"
+                            Click="BtnResetFilters_Click" />
+                </StackPanel>
+
+                <WrapPanel Margin="0,0,0,0"
+                           ItemHeight="30"
+                           ItemWidth="200">
+                    <ComboBox x:Name="CmbCity"
+                              Width="200"
+                              Height="30"
+                              Margin="0,0,16,8"
+                              SelectionChanged="Filter_SelectionChanged"
+                              DisplayMemberPath="Name" />
+                    <ComboBox x:Name="CmbCategory"
+                              Width="200"
+                              Height="30"
+                              Margin="0,0,16,8"
+                              SelectionChanged="Filter_SelectionChanged"
+                              DisplayMemberPath="Name" />
+                    <ComboBox x:Name="CmbType"
+                              Width="200"
+                              Height="30"
+                              Margin="0,0,16,8"
+                              SelectionChanged="Filter_SelectionChanged"
+                              DisplayMemberPath="Name" />
+                    <ComboBox x:Name="CmbStatus"
+                              Width="200"
+                              Height="30"
+                              Margin="0,0,16,8"
+                              SelectionChanged="Filter_SelectionChanged"
+                              DisplayMemberPath="Name" />
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Список объявлений -->
+        <Border Grid.Row="2"
+                Background="White">
+            <ListView x:Name="AdsListView"
+                      Margin="0"
+                      BorderThickness="0"
+                      Foreground="{StaticResource PrimaryTextBrush}"
+                      HorizontalContentAlignment="Stretch">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,16,16"
+                                    Padding="10"
+                                    Background="{StaticResource CardBackgroundBrush}"
+                                    BorderBrush="{StaticResource CardBorderBrush}"
+                                    BorderThickness="1">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Фото объявления -->
+                                <Image Width="90"
+                                           Height="90"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           Margin="0,0,10,0"
+                                           Stretch="UniformToFill"
+                                           Source="{Binding ImagePath, Converter={StaticResource ImagePathToSourceConverter}}" />
+
+                                <!-- Текстовая информация -->
+                                <StackPanel Grid.Column="1"
+                                                VerticalAlignment="Top">
+                                    <TextBlock Text="{Binding Title}"
+                                                   FontWeight="Bold"
+                                                   FontSize="14"
+                                                   Margin="0,0,0,4"
+                                                   Foreground="{StaticResource PrimaryTextBrush}" />
+                                    <TextBlock Margin="0,0,0,2"
+                                                   Foreground="{StaticResource SecondaryTextBrush}">
+                                            <Run Text="Город: " />
+                                            <Run Text="{Binding Cities.Name}" />
+                                    </TextBlock>
+                                    <TextBlock Margin="0,0,0,2"
+                                                   Foreground="{StaticResource SecondaryTextBrush}">
+                                            <Run Text="Категория: " />
+                                            <Run Text="{Binding Categories.Name}" />
+                                    </TextBlock>
+                                    <TextBlock Margin="0,0,0,2"
+                                                   Foreground="{StaticResource SecondaryTextBrush}">
+                                            <Run Text="Тип: " />
+                                            <Run Text="{Binding AdTypes.Name}" />
+                                    </TextBlock>
+                                    <TextBlock Margin="0,0,0,2"
+                                                   Foreground="{StaticResource SecondaryTextBrush}">
+                                            <Run Text="Статус: " />
+                                            <Run Text="{Binding AdStatuses.Name}" />
+                                    </TextBlock>
+                                    <TextBlock Margin="0,0,0,2"
+                                                   Foreground="{StaticResource SecondaryTextBrush}">
+                                            <Run Text="Дата: " />
+                                            <Run Text="{Binding PostDate, StringFormat=\{0:dd.MM.yyyy\}}" />
+                                    </TextBlock>
+                                    <TextBlock Margin="0,4,0,0"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource AccentBrush}">
+                                            <Run Text="{Binding Price}" />
+                                            <Run Text=" ₽" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </Border>
+    </Grid>
+</Page>
